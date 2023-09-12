@@ -45,7 +45,6 @@ function isAdminAlternative(user: IUser | IAdmin): user is IAdmin {
 	return (user as IAdmin).role !== undefined;
 }
 
-
 function setRole(user: IUser | IAdmin) {
 	if (isAdmin(user)) {
 		user.role = 0;
