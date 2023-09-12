@@ -1,1 +1,1 @@
-# purpleschoo-typescript-hw
+# Домашнее задание по курсу Purpleschoo Typescript
