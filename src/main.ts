@@ -1,175 +1,36 @@
-// Продвинутые типы - Asserts
+// Домашнее задание - Продвинутые типы
 
-interface IUser {
-	name: string;
+import axios from 'axios';
+import { API_DUMMYJSON_URL, USER_ERROR } from './constants';
+
+function isResHasUsers(res: IRes): res is IRes {
+	return !!res && 'data' in res
+		&& 'users' in res.data && Array.isArray(res.data.users)
+		&& 'total' in res.data
+		&& 'skip' in res.data
+		&& 'limit' in res.data
+		;
 }
 
-const a = {};
-assertUser(a); // что-бы это сработало (и не нужно было доабавлять if(assertUser(a)) { ... }), нужно в type guard добавить слово: asserts и всё что ниже, точно 'name' in obj
-a.name = 'Вася';
-
-function assertUser(obj: unknown): asserts obj is IUser { // asserts - говорит ts, что мы точно проверили на 'name' in obj
-	if (typeof obj === 'object' && !!obj && 'name' in obj)  // !!obj - первый ! - проверка на null; второй ! приводит к bool типу
-	{
-		return;
+async function getUsers(): Promise<IResData> {
+	try {
+		const res = await axios.get(API_DUMMYJSON_URL.USERS);
+		if (isResHasUsers(res)) {
+			res.data.total = +res.data.total;
+			res.data.skip = +res.data.skip;
+			res.data.limit = +res.data.limit;
+			return res.data;
+		}
 	}
-	throw new Error('Не пользователь');
+	catch (error) {
+		if (error instanceof Error) {
+			console.log(error.message);
+		}
+	}
+	throw new Error(USER_ERROR.BAD_REQUEST);
 }
 
-/*
-!! -  проверка именно на null с приведением к bool
-function test(x){
-	if (x != null)
-		return true;
-	else
-		return false;
-}
-
-аналог:
-function test2(x){
-	return !!x;
-}
-
-
-
-https://learn.javascript.ru/logical-operators
-
-|| выводит первое истинностное значение, если таких нет, то выводит последнее
-выводит без преобразований к bool
-
-true || alert("никогда не сработает");
-false || alert("сработает");
-
-let firstName = "";
-let lastName = "";
-let nickName = "Суперкодер";
-
-alert( firstName || lastName || nickName || "Аноним"); // Суперкодер
-
-let firstName = "";
-let lastName = "";
-let nickName = "";
-
-alert( firstName || lastName || nickName || "Аноним"); // Аноним
-
-a ||= b;
-Вычисляет операнды слева направо.
-Конвертирует a в логическое значение.
-Если a ложно (0/null/undefined/false), присваивает a значение b.
-
-let johnHasCar = false;
-johnHasCar ||= "У Джона нет машины!"; // то же самое, что false || (johnHasCar = "...")
-alert( johnHasCar ); // "У Джона нет машины!"
-
-…А здесь происходит преобразование к логическому значению:
-
-let manufacturer = ""; // оператор ||= преобразует пустую строку "" к логическому значению false
-manufacturer ||= "Неизвестный производитель"; // то же самое, что false || (manufacturer = "...")
-alert( manufacturer ); // "Неизвестный производитель"
-
-
-аналоги без сахара:
-let johnHasCar = false;
-
-if (johnHasCar == false) {
-  johnHasCar = "У Джона нет машины!";
-}
-
-alert(johnHasCar); // "У Джона нет машины!"
-
-//
-let manufacturer = "";
-
-if (manufacturer == false) {
-  manufacturer = "Неизвестный производитель";
-}
-
-alert(manufacturer); // "Неизвестный производитель"
-
-
-
-&&
-
-И «&&» находит первое ложное значение
-При нескольких подряд операторах И:
-
-result = value1 && value2 && value3;
-
-Оператор && выполняет следующие действия:
-
-Вычисляет операнды слева направо.
-Каждый операнд преобразует в логическое значение. Если результат false, останавливается и возвращает 
-исходное значение этого операнда.
-Если все операнды были истинными, возвращается последний.
-Другими словами, И возвращает первое ложное значение. Или последнее, если ничего не найдено.
-
-Вышеуказанные правила схожи с поведением ИЛИ. Разница в том, что И возвращает первое ложное значение, а ИЛИ –  первое истинное.
-
-Примеры:
-
-// Если первый операнд истинный,
-// И возвращает второй:
-alert( 1 && 0 ); // 0
-alert( 1 && 5 ); // 5
-
-// Если первый операнд ложный,
-// И возвращает его. Второй операнд игнорируется
-alert( null && 5 ); // null
-alert( 0 && "какая-то строка" ); // 0
-
-
-Можно передать несколько значений подряд. В таком случае возвратится первое «ложное» значение, на котором остановились вычисления.
-alert( 1 && 2 && null && 3 ); // null
-
-Когда все значения верны, возвращается последнее
-alert( 1 && 2 && 3 ); // 3
-
-
-Приоритет оператора && больше, чем у ||
-Приоритет оператора И && больше, чем ИЛИ ||, так что он выполняется раньше.
-
-Таким образом, код a && b || c && d по существу такой же, как если бы выражения && были в круглых скобках: (a && b) || (c && d).
-
-
-
-/////////////////////////////////////////////////////////////////
-https://learn.javascript.ru/nullish-operators
-
-result = a ?? b - ?? возвращает первый аргумент, если он не null/undefined, иначе второй.
-равнозначно
-result = (a !== null && a !== undefined) ? a : b;
-
-|| в отличии от ?? - || возвращает первое ИСТИННОЕ значение. ?? возвращает первое ОПРЕДЕЛЁННОЕ значение.
-Проще говоря, оператор || не различает false, 0, пустую строку "" и null/undefined - т.е. является более широким по сравнению с ??
-
-Пример:
-let height = 0;
-alert(height || 100); // 100
-alert(height ?? 100); // 0
-
-Оператор нулевого присваивания (??=)
-
-Оператор ??= присвоит a значение b только в том случае, если a не определено (null/undefined).
-a ??= b;
-
-let userAge = null;
-
-if (userAge === null || userAge === undefined) {
-  userAge = 18;
-}
-аналог
-let userAge = null;
-userAge ??= 18;
-alert(userAge) // 18
-
-если userAge определено:
-let userAge = 18;
-
-userAge ??= alert("не сработает");
-userAge ??= 21;
-userAge ??= null;
-
-alert(userAge) // по-прежнему 18
-
-
-*/
+(async function () {
+	const { users, total, skip, limit }: IResData = await getUsers();
+	console.log({ users, total, skip, limit });
+})();
