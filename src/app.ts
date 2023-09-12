@@ -17,7 +17,7 @@ interface IResponse {
 	answer: string,
 	tags: string[];
 	likes: number;
-	status: QuestionStatus;
+	status?: QuestionStatus;
 }
 
 
