@@ -1,3 +1,5 @@
+import { API_URL_GET_DATA } from './constants';
+
 enum PaymentStatus {
 	SUCCESS = 'success',
 	FAILED = 'failed',
@@ -26,15 +28,13 @@ interface IResponseFailed {
 	}
 }
 
-
 const getServerData = async (payment: IPayment): Promise<IResponseSuccess | IResponseFailed> => {
-	const res = await fetch(`/api/get/data`, {
+	const res = await fetch(API_URL_GET_DATA, {
 		method: 'GET',
 		body: JSON.stringify(payment),
 	});
 	return await res.json();
 }
-
 
 // Запрос в виде платежа
 const payment: IPayment = {
