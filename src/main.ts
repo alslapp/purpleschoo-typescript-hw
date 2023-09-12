@@ -1,48 +1,62 @@
-// Основные типы - Unknown
+// Основные типы - Never
 
-// unknow более строгий чем any
-// хорошо его использовать тогда, когда неизвестно, что будет в переменной (вместо any)
+// #1
+// тут использовать void некорректно, т.к. эта функция никогда
+// ничего не вернет, а void подразумевает, что может вернуться что угодно, 
+// но будет проигнорировано
+function generateError(message: string): never {
+	throw new Error(message);
+}
 
-let input: unknown;
+// #2
+// функция никогда не остановится
+function dumpError(): never {
+	while (true) { }
+}
 
-input = 3;
-input = ['dsd', 345];
+// #3
+// функция никогда не остановится
+function rec(): never {
+	return rec();
+}
 
-// тут ошибка, т.к. нужно сузить тип
-// let res: string = input;
+// #4
+type paymentAction = 'refund' | 'checkout' | 'reject';
 
-// сужение типов для unknown не работает, нужно каждый раз проверять тип переменной
-function run(i: unknown) {
-	if (typeof i == 'number') {
-		i++;
-	}
-	else {
-		i // тут i снова unknown
+function processAction(action: paymentAction) {
+	switch (action) {
+		case 'refund':
+			// ...
+			break;
+		case 'checkout':
+			// ...
+			break;
+		// что тут происходит:
+		// в compile time: сюда никогда не дейдет действие, поэтому тут action имеет тип never
+		// но если вдруг, в run time добавиться новый action (например придет с api),
+		// соотв. switch додет сюда и выдаст ошибку
+		default:
+			// const _: never = action;
+			throw new Error(`Нет такого action`);
 	}
 }
 
+// #5
 
-// пример использования unknown
-async function getData() {
-	try {
-		await fetch('');
+// в рантайме реально может прийти что угодно, для этого
+// делаем  Исчерпывающую проверку
+function isString(x: string | number): boolean {
+	if (typeof x === 'string') {
+		return true;
 	}
-	catch (error) {
-		// тут error имеет type unknown, т.е. нужно явно проверять каждый раз тип
-		if (error instanceof Error) {
-			console.log(error.message);
-		}
-
-		// или можно кастануть к типу, но соотв. в error может прийти что угодно, например
-		// строка и тогда код выдаст ошибку типа.
-		const e = error as Error;
-		console.log(e.message);
-
+	else if (typeof x === 'number') {
+		return false;
 	}
+	// т.е. если x явно не строка и не число и если функцию необходим прервать
+	// это называется Исчерпывающая проверка, т.е. функция generateError
+	// возвращает never, соотв. ошибки в compile time и в run time не будет.
+	// обязательно функция generateError должна вернуть never, 
+	// как будто бы функция isString дальше generateError() не пройдет
+	// это нужно для типизации
+	generateError('Тип переменной неопределен');
 }
-
-// union с unknown
-
-type U1 = unknown | number; // при юнион типах - U1 всегда будет unknown
-
-type T1 = unknown & string; // при intersection T1 всегда будет тип, которым расширяем, т.е. тут: T1 будет string
