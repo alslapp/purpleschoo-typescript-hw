@@ -1,9 +1,4 @@
-import { API_URL_GET_DATA } from './constants';
-
-enum PaymentStatus {
-	SUCCESS = 'success',
-	FAILED = 'failed',
-}
+// Продвинутые типы: Упражнение - Делаем typeguard ответа
 
 interface IPayment {
 	sum: number;
@@ -11,39 +6,49 @@ interface IPayment {
 	to: number;
 }
 
-interface IResponseData extends IPayment {
+enum PaymentStatus {
+	Success = 'success',
+	Failed = 'failed',
+}
+
+interface IPaymentRequest extends IPayment { }
+
+interface IDataSuccess extends IPayment {
 	databaseId: number;
 }
 
+interface IDataFailed {
+	errorMessage: string;
+	errorCode: number;
+}
+
 interface IResponseSuccess {
-	status: PaymentStatus.SUCCESS,
-	data: IResponseData;
+	status: PaymentStatus.Success;
+	data: IDataSuccess;
 }
 
 interface IResponseFailed {
-	status: PaymentStatus.FAILED,
-	data: {
-		errorMessage: string,
-		errorCode: number;
+	status: PaymentStatus.Failed;
+	data: IDataFailed;
+}
+
+type TRes = IResponseSuccess | IResponseFailed;
+
+type f = (res: TRes) => number;
+
+
+// typeguard для проверки ответа на success
+function isResponseSuccess(res: TRes): res is IResponseSuccess {
+	return res.status === PaymentStatus.Success;
+}
+
+
+const getDatabaseId: f = (res: TRes): number => {
+	if (isResponseSuccess(res)) {
+		return res.data.databaseId;
+	}
+	else {
+		throw new Error(res.data.errorMessage);
 	}
 }
 
-const getServerData = async (payment: IPayment): Promise<IResponseSuccess | IResponseFailed> => {
-	const res = await fetch(API_URL_GET_DATA, {
-		method: 'GET',
-		body: JSON.stringify(payment),
-	});
-	return await res.json();
-}
-
-// Запрос в виде платежа
-const payment: IPayment = {
-	sum: 10000,
-	from: 2,
-	to: 4,
-};
-
-(async () => {
-	const data = await getServerData(payment);
-	console.log(`Ответ от сервера: `, data);
-})();

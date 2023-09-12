@@ -1,1 +1,0 @@
-export const API_URL_GET_DATA = `/api/get/data`;
