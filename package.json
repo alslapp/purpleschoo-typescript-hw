@@ -4,7 +4,8 @@
   "description": "",
   "main": "./dist/main.js",
   "scripts": {
-    "tsc:w": "tsc -w"
+    "tsc:w": "tsc -w",
+    "build:run": "tsc && node dist/main.js"
   },
   "author": "",
   "license": "ISC"
