@@ -5,12 +5,12 @@ enum Gender {
 
 interface IHair {
 	color: string;
-	type: string
+	type: string;
 }
 
 interface ICoordinates {
 	lat: number;
-	lng: number
+	lng: number;
 }
 
 interface IAddress {
@@ -18,7 +18,7 @@ interface IAddress {
 	city: string;
 	coordinates: ICoordinates;
 	postalCode: number;
-	state: string
+	state: string;
 }
 
 interface IBank {
@@ -64,7 +64,7 @@ interface IUser {
 	ein: string;
 	ssn: string;
 	userAgent: string;
-};
+}
 
 interface IResData {
 	users: IUser[];

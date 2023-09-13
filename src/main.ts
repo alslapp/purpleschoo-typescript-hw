@@ -4,6 +4,7 @@ import axios from 'axios';
 import { API_DUMMYJSON_URL, USER_ERROR } from './constants';
 
 function isResHasUsers(res: IRes): res is IRes {
+	// prettier-ignore
 	return !!res && 'data' in res
 		&& 'users' in res.data && Array.isArray(res.data.users)
 		&& 'total' in res.data
@@ -21,8 +22,7 @@ async function getUsers(): Promise<IResData> {
 			res.data.limit = +res.data.limit;
 			return res.data;
 		}
-	}
-	catch (error) {
+	} catch (error) {
 		if (error instanceof Error) {
 			console.log(error.message);
 		}
