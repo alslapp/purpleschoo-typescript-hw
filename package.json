@@ -2,7 +2,7 @@
   "name": "purpleschoo-typescript-hw",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/main.js",
+  "main": "./main.ts",
   "scripts": {
     "tsc:w": "tsc -w",
     "build:run": "tsc && node dist/main.js"
