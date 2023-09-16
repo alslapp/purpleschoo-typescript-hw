@@ -1,7 +1,7 @@
 // Классы
 // Упражнение - Делаем корзину товаров
 
-сlass Product implements IProduct {
+class Product implements IProduct {
 
 	constructor(
 		public id: number,
