@@ -1,6 +1,8 @@
 // Классы
 // Упражнение - Делаем корзину товаров
 
+import { IProduct, ICart, IProductInCart, DeliveryType, TDelivery } from './types';
+
 class Product implements IProduct {
 
 	constructor(
@@ -10,7 +12,6 @@ class Product implements IProduct {
 	) { }
 
 }
-
 
 class Cart implements ICart {
 	products: IProductInCart[] = [];
@@ -30,9 +31,9 @@ class Cart implements ICart {
 
 		// что я делаю не так?
 
-
 		if (index !== -1) {
-			const prod = this.products[index]; // т.е. почему то нужно обязательно this.products[index] присвоить в отдельную переменную
+			// т.е. почему то нужно обязательно this.products[index] присвоить в отдельную переменную
+			const prod = this.products[index];
 			if (prod) prod.quantity += quantity;
 		}
 		else {
@@ -87,10 +88,12 @@ console.log(cart);
 
 cart.deleteProduct(product3.id);
 
-console.log(cart);
 
+
+console.log(cart);
 console.log('totalPrice', cart.totalPrice);
 console.log('checkout 1', cart.checkout);
+
 
 
 cart.addDelivery({
@@ -98,6 +101,7 @@ cart.addDelivery({
 	type: DeliveryType.PVZ,
 	pvzId: 1,
 });
+console.log(cart);
 console.log('checkout 2', cart.checkout);
 
 cart.deleteDelivery();
@@ -111,3 +115,5 @@ cart.addDelivery({
 });
 
 console.log('checkout 4', cart.checkout);
+
+console.log(cart);

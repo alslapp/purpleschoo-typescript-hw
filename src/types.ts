@@ -1,35 +1,35 @@
-interface IProduct {
+export enum DeliveryType {
+	PVZ = 'PVZ',
+	HOME = 'HOME',
+}
+
+export interface IProduct {
 	id: number;
 	name: string;
 	price: number;
 }
 
-interface IProductInCart extends IProduct {
+export interface IProductInCart extends IProduct {
 	quantity: number;
 }
 
-enum DeliveryType {
-	PVZ = 'PVZ',
-	HOME = 'HOME',
-}
-
-interface IDelivery {
+export interface IDelivery {
 	date: Date;
 }
 
-interface IDeliveryPVZ extends IDelivery {
+export interface IDeliveryPVZ extends IDelivery {
 	type: DeliveryType.PVZ,
 	pvzId: number;
 }
 
-interface IDeliveryHOME extends IDelivery {
+export interface IDeliveryHOME extends IDelivery {
 	type: DeliveryType.HOME,
 	address: string;
 }
 
-type TDelivery = IDeliveryPVZ | IDeliveryHOME;
+export type TDelivery = IDeliveryPVZ | IDeliveryHOME;
 
-interface ICart {
+export interface ICart {
 	products: IProductInCart[];
 	delivery: TDelivery | null;
 
