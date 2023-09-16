@@ -27,18 +27,21 @@ export interface IDeliveryHOME extends IDelivery {
 	address: string;
 }
 
+export interface ICheckoutSuccess {
+	success: boolean;
+};
+
 export type TDelivery = IDeliveryPVZ | IDeliveryHOME;
 
 export interface ICart {
-	products: IProductInCart[];
-	delivery: TDelivery | null;
-
 	addProduct(product: IProduct, quantity?: number): void;
 	deleteProduct(id: number): void;
 
 	addDelivery(delivery: TDelivery): void;
+	addDeliveryPvz(pvzId: number, date: Date): void;
+	addDeliveryHome(address: string): void;
 	deleteDelivery(): void;
+	checkOut(): never | ICheckoutSuccess;
 
 	get totalPrice(): number;
-	get checkout(): boolean;
 }

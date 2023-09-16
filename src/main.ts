@@ -1,7 +1,8 @@
 // Классы
 // Упражнение - Делаем корзину товаров
 
-import { IProduct, ICart, IProductInCart, DeliveryType, TDelivery } from './types';
+import { ERROR_CART_CHECKOUT } from './constants';
+import { IProduct, ICart, IProductInCart, DeliveryType, TDelivery, ICheckoutSuccess } from './types';
 
 class Product implements IProduct {
 
@@ -13,9 +14,10 @@ class Product implements IProduct {
 
 }
 
+
 class Cart implements ICart {
-	products: IProductInCart[] = [];
-	delivery: TDelivery | null = null;
+	private products: IProductInCart[] = [];
+	private delivery: TDelivery | null = null;
 
 	addProduct({ id, ...product }: IProduct, quantity = 1): void {
 
@@ -54,17 +56,45 @@ class Cart implements ICart {
 		this.delivery = delivery;
 	}
 
+	addDeliveryPvz(pvzId: number, date: Date): void {
+		this.delivery = {
+			type: DeliveryType.PVZ,
+			date,
+			pvzId,
+		};
+	}
+
+	addDeliveryHome(address: string): void {
+		this.delivery = {
+			type: DeliveryType.HOME,
+			address,
+			date: new Date(),
+		};
+	}
+
 	deleteDelivery(): void {
 		this.delivery = null;
 	}
 
-	get totalPrice(): number {
-		return this.products.reduce((sum, prod) => (sum + prod.quantity * prod.price), 0);
+	checkOut(): never | ICheckoutSuccess {
+		if (this.products.length === 0) {
+			throw new Error(ERROR_CART_CHECKOUT.PRODUCTS);
+		}
+		else if (!!this.delivery) {
+			throw new Error(ERROR_CART_CHECKOUT.DELIVERY);
+		}
+		return {
+			success: true,
+		}
 	}
 
-	get checkout(): boolean {
-		return this.products.length > 0 && !!this.delivery;
+	get totalPrice(): number {
+		return this.products
+			.map((p: IProductInCart) => (p.price * p.quantity))
+			.reduce((sum: number, priceProd: number) => (sum + priceProd));
 	}
+
+
 
 }
 
@@ -96,11 +126,10 @@ console.log('checkout 1', cart.checkout);
 
 
 
-cart.addDelivery({
-	date: new Date(),
-	type: DeliveryType.PVZ,
-	pvzId: 1,
-});
+cart.addDeliveryPvz(1, new Date())
+
+
+
 console.log(cart);
 console.log('checkout 2', cart.checkout);
 
@@ -108,11 +137,7 @@ cart.deleteDelivery();
 
 console.log('checkout 3', cart.checkout);
 
-cart.addDelivery({
-	date: new Date(),
-	type: DeliveryType.HOME,
-	address: 'Москва'
-});
+cart.addDeliveryHome('Москва')
 
 console.log('checkout 4', cart.checkout);
 
