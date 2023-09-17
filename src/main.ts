@@ -1,36 +1,68 @@
 // Классы
-// урок Статические свойства
+// урок Работа с this
 
-class UserService {
+class Payment {
+	private date: Date = new Date();
 
-	// static name: string = 'name' //статическое свойство name нельзя определить, т.к. оно существует под капотом класса
-	// можно определить только обычное свойство name
+	getDate(this: Payment, test: string) { // this на первом месте - это фича TS - чтобы при потере контекста подсветить ошибку, в билде параметра this не будет
 
-	static db: any;
+		console.log('getDate', test);
 
-	static getUser() {
-		return this.db.findById(); // или вместо UserService. можно использовать this.
+		return this.date;
 	}
 
-	constructor(id: number) {
-
-	}
-
-	create() {
-		UserService.db;
-	}
-
-	// это что то типа constructor только для статического выполнения
-	// можно использовать только синхронные вызовы
-	static {
-		UserService.db = {
-			findById: (): void => { }
-		}
+	getDateArrow = () => {
+		// при таком определении метода ( именно через = "равно" !!! ) не нужно биндить контекст и передавать this в параметрах метода 
+		// (если присваивать метод свойсту объекта например: user = { test: (new Payment().getDateArrow) } ),
+		// т.к. такое создание метода не создает метод в прототипе, а создает его на лету, при инстанцировании класса, т.е. такая запись в райнтайме выглядите так:
+		/*
+			constructor() {
+				this.getDateArrow = () => {
+					console.log('getDateArrow');
+					return this.date;
+				};
+			}
+		*/
+		console.log('getDateArrow');
+		return this.date;
 	}
 
 }
 
-UserService.db;
+const p = new Payment();
 
-const inst = new UserService();
-inst.create();
+const user = {
+	id: 1,
+	paymentDate: p.getDate.bind(p),
+	paymentDateArrow: p.getDateArrow
+}
+
+// console.log(p.getDate('1'));
+// console.log(user.paymentDate('4'));
+// console.log(user.paymentDateArrow());
+
+
+class PaymentPersistent extends Payment {
+	// save() {
+	// 	return super.getDate('test');
+	// }
+	// saveThis() {
+	// 	return this.getDate('test this');
+	// }
+
+	saveArrow() {
+		return super.getDateArrow(); // super - так не работает, потому что super вызывает меторы из прототипа, 
+		// а созданеие метода через = и стрелочную функцию не создают метод в прототипе, 
+		// а создаю метод в конструкторе, при инстанцировании класса
+	}
+
+	saveArrowThis() {
+		return this.getDateArrow(); // this - так работает
+	}
+
+}
+
+const pp = new PaymentPersistent();
+// console.log(pp.save());
+// console.log(pp.saveArrow());
+console.log(pp.saveArrowThis());
