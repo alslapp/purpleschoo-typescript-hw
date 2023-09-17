@@ -2,39 +2,54 @@
 // Упражнение - Делаем корзину товаров
 
 import { ERROR_CART_CHECKOUT } from './constants';
-import { IProduct, ICart, IProductInCart, DeliveryType, TDelivery, ICheckoutSuccess } from './types';
 
-class Product implements IProduct {
+class Delivery {
+	constructor(
+		public date: Date,
+	) { }
+}
+
+class DeliveryShop extends Delivery {
+	constructor(
+		public shopId: number,
+	) {
+		super(new Date());
+	}
+}
+
+class DeliveryHome extends Delivery {
+	constructor(
+		public address: string,
+		date: Date,
+	) {
+		super(date);
+	}
+}
+
+export type TDelivery = DeliveryShop | DeliveryHome;
+
+export interface ICheckoutSuccess {
+	success: boolean;
+};
+
+class Product {
 
 	constructor(
 		public id: number,
 		public name: string,
 		public price: number,
+		public quantity: number = 1,
 	) { }
 
 }
 
+class Cart {
+	private products: Product[] = [];
+	private delivery: TDelivery;
 
-class Cart implements ICart {
-	private products: IProductInCart[] = [];
-	private delivery: TDelivery | null = null;
-
-	addProduct({ id, ...product }: IProduct, quantity = 1): void {
-
+	addProduct({ id, ...product }: Product, quantity = 1): void {
 		const index = this.products.findIndex(p => p.id === id);
-
-		// почему в строках ниже this.products[index] выдает ошибку: Object is possibly 'undefined'
-		// if (this.products[index]) {
-		// 	const prod = this.products[index];	
-		// 	// if (prod) this.products[index].quantity = quantity; // -  ошибка
-		// 	// if (this.products[index]) this.products[index].quantity = quantity; // - ошибка
-		// 	if (prod) prod.quantity = quantity; // - так работает
-		// }
-
-		// что я делаю не так?
-
 		if (index !== -1) {
-			// т.е. почему то нужно обязательно this.products[index] присвоить в отдельную переменную
 			const prod = this.products[index];
 			if (prod) prod.quantity += quantity;
 		}
@@ -49,38 +64,19 @@ class Cart implements ICart {
 
 	deleteProduct(id: number): void {
 		if (typeof id !== 'number' || id < 1) return;
-		this.products = this.products.filter(p => p.id !== id);
+		this.products = this.products.filter((p: Product) => p.id !== id);
 	}
 
 	addDelivery(delivery: TDelivery): void {
 		this.delivery = delivery;
 	}
 
-	addDeliveryPvz(pvzId: number, date: Date): void {
-		this.delivery = {
-			type: DeliveryType.PVZ,
-			date,
-			pvzId,
-		};
-	}
-
-	addDeliveryHome(address: string): void {
-		this.delivery = {
-			type: DeliveryType.HOME,
-			address,
-			date: new Date(),
-		};
-	}
-
-	deleteDelivery(): void {
-		this.delivery = null;
-	}
-
 	checkOut(): never | ICheckoutSuccess {
+
 		if (this.products.length === 0) {
 			throw new Error(ERROR_CART_CHECKOUT.PRODUCTS);
 		}
-		else if (!!this.delivery) {
+		else if (!!!this.delivery) {
 			throw new Error(ERROR_CART_CHECKOUT.DELIVERY);
 		}
 		return {
@@ -90,13 +86,17 @@ class Cart implements ICart {
 
 	get totalPrice(): number {
 		return this.products
-			.map((p: IProductInCart) => (p.price * p.quantity))
+			.map((p: Product) => (p.price * p.quantity))
 			.reduce((sum: number, priceProd: number) => (sum + priceProd));
 	}
 
-
-
 }
+
+
+
+
+
+////////////////////////////////////////////////
 
 const cart = new Cart();
 
@@ -118,27 +118,16 @@ console.log(cart);
 
 cart.deleteProduct(product3.id);
 
-
-
 console.log(cart);
 console.log('totalPrice', cart.totalPrice);
-console.log('checkout 1', cart.checkout);
 
-
-
-cart.addDeliveryPvz(1, new Date())
-
-
+cart.addDelivery(new DeliveryShop(1));
 
 console.log(cart);
-console.log('checkout 2', cart.checkout);
+console.log('checkout 2', cart.checkOut());
 
-cart.deleteDelivery();
+cart.addDelivery(new DeliveryHome('Москва', new Date()));
 
-console.log('checkout 3', cart.checkout);
-
-cart.addDeliveryHome('Москва')
-
-console.log('checkout 4', cart.checkout);
+console.log('checkout 4', cart.checkOut());
 
 console.log(cart);
