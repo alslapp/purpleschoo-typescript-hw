@@ -1,32 +1,42 @@
 // Классы
-// урок Типизация this
+// урок Абстрактные классы
 
-class UserBuilder {
-	name: string;
 
-	setName(name: string): this {
-		this.name = name;
-		return this;
+
+/*
+
+Разница между abstract class и интерфейсами
+
+в интерфейсе можно только задать методы как тип, но нельзя задать реализацию
+
+abstract метод - тоже самое, что и определение метода в интерфейсе - можно задать только тип метода - что принимает и что возвращает
+
+
+соотв. задав в абстрактном классе абстрактный метод, можно задать обычный метод, написать его реализацию и в нем можно вызывать абстрактные методы, т.к. подразумевается, 
+что при расширении класса абстрактным классом, обязатель нужно будет реализовать все абстрактные методы.
+
+а методы, которые заданы в абстрактном классе можно не переопределять, они и так будут доступны в расширяемом классе, как будто бы мы расширили класс обычным классом.
+
+
+*/
+
+
+abstract class Controller {
+	abstract handle(req: any): any;
+
+	handleWihthLogs(req: any) {
+		console.log('START');
+		this.handle(req);
+		console.log('END');
+	}
+}
+
+class UserController extends Controller {
+
+	handle(req: any) {
+		console.log(req);
 	}
 
-	isAdmin(): this is AdminBuilder {
-		return this instanceof AdminBuilder;
-	}
-
 }
 
-class AdminBuilder extends UserBuilder {
-	roles: string[] = ['user', 'admin']; // если у классов не будет разных методов или свойств, то в рантайме невозможно будет отличить UserBuilder от AdminBuilder и type guard определит тип как: let user: UserBuilder | AdminBuilder;
-}
-
-const res = new UserBuilder().setName('вася');
-const res2 = new AdminBuilder().setName('вася');
-
-let user: UserBuilder | AdminBuilder = new UserBuilder();
-
-if (user.isAdmin()) {
-	console.log(user);
-}
-else {
-	console.log(user);
-}
+console.log(new UserController().handleWihthLogs({ body: 'test' }));
