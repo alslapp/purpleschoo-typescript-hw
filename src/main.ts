@@ -1,33 +1,46 @@
 // Generics
-// урок Пример встроенных generic
+// Упражнение - Функция преобразования в строку
 
-const num: Array<number> = [1, 2, 3];
+/*
+Необходимо написать функцию toString, которая принимает любой тип 
+и возвращает его строковое представление. Если не может, то возвращает undefined
+*/
 
 
-async function test() {
-	const a = await new Promise<number>((resolve, reject) => { // в дженерике промиса указываем возвращаемый тип данных
-		resolve(1)
-	});
+function toString<T>(a: T): string | undefined {
+
+	console.log('type', typeof a);
+
+	if (Array.isArray(a)) {
+		return a.toString();
+	}
+
+	switch (typeof a) {
+		case 'string':
+			return a;
+
+		case 'number':
+		case 'symbol':
+		case 'bigint':
+		case 'boolean':
+		case 'function':
+			return a.toString();
+
+		case 'object':
+			return JSON.stringify(a);
+
+		default:
+			return undefined;
+	}
 }
 
+console.log(toString('Привет'));
+console.log(toString('1111'));
+console.log(toString([1, 2, 'asdfasdf', { test: 'adfasdf' }]));
+console.log(toString({ test: 'adfasdf' }));
 
-const check: Record<string, boolean> = { // указываем тип ключа и значения
-	drive: true,
-	kpp: false,
-}
+console.log(toString(true));
 
+console.log(toString(() => { }));
 
-function logMiddleware<T>(data: T): T {
-	console.log(data);
-	return data;
-}
-
-const res = logMiddleware<number>(10);
-
-
-
-
-function getSplitedHalf<T>(data: Array<T>): Array<T> { // ограничить тип дженерика
-	const l = data.length / 2;
-	return data.splice(0, l);
-}
+console.log(toString(function () { }));
