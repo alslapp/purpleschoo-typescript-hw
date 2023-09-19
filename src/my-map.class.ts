@@ -10,6 +10,7 @@ class MapItem {
 	constructor(
 		public value: IItem,
 		public next: MapItem | null,
+		// public deleted = false,
 	) { }
 }
 
@@ -29,6 +30,19 @@ class MyMap {
 			hash = hash & hash;
 		}
 		return 'h_' + (hash < 0 ? '0' + (hash * -1) : hash) + '';
+	}
+
+	// проверка объекта на пустоту
+	protected _isObjectEmpty(obj: unknown) {
+		if (typeof obj !== 'object') {
+			return true;
+		}
+		// @ts-ignore
+		// иначе ругается на неиспользуемую переменную
+		for (const val in obj) {
+			return false
+		}
+		return true;
 	}
 
 	set(key: string, value: unknown): IItem {
@@ -116,12 +130,17 @@ class MyMap {
 			this._lastItem = current;
 		}
 
-		if (deletedItem !== null) this._size--;
+		if (deletedItem !== null) {
+			this._size--;
+			const returnedValue = JSON.parse(JSON.stringify(deletedItem.value));
+			deletedItem = null;
+			return returnedValue;
+		}
 
-		// возвращаем удаленных элемент
-		return deletedItem?.value;
-
+		return null;
 	}
+
+
 
 	get(key: string): IItem | null {
 		if (this._buckets === null) return null;
@@ -145,8 +164,12 @@ class MyMap {
 		this._size = 0;
 	}
 
-	get size(): number {
+	get size() {
 		return this._size;
+	}
+
+	get buckets() {
+		return this._buckets;
 	}
 
 	// итератор по мапе через for of
@@ -169,4 +192,4 @@ class MyMap {
 
 }
 
-export { MyMap };
+export { MyMap, MapItem };

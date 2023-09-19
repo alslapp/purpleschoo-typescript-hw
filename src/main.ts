@@ -34,7 +34,20 @@ console.log('температура в городе Казань: ', myMap.get('
 console.log('температура в городе Москва: ', myMap.get('Moscow'));
 console.log('температура в городе Kazan3: ', myMap.get('Kazan3'));
 
-myMap.delete('Moscow2');
+console.log('удаление: ', myMap.delete('Moscow2'));
+console.log('');
+
+
+// console.log('==================================');
+// for (let b in myMap.buckets) {
+// 	const bucket = myMap.buckets[b];
+// 	for (let c in bucket) {
+// 		const item = bucket[c];
+// 		if (item) console.log('item', item['value']);
+// 	}
+// }
+// console.log('==================================');
+
 
 console.log('size 4', myMap.size);
 
