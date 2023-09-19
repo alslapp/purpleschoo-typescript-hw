@@ -1,52 +1,21 @@
 // Generics
-// урок Mixins
+// Домашнее задание - Generics
 
-type Constructor = new (...args: any[]) => {};
-type GConstructor<T = {}> = new (...args: any[]) => T; // задать тип по умолчанию: <T = {}>
+type TObj = Record<string, number>;
 
-class List {
-	constructor(public items: string[]) { }
+const obj: TObj = {
+	a: 1,
+	b: 2,
+};
+
+function swapKeysAndValues<T extends TObj>(obj: T) {
+	const res: Record<number, string> = {};
+	Object.entries(obj).forEach(([key, value]) => {
+		res[value] = key
+	})
+	return res;
 }
 
-class Accordeon {
-	isOpened: boolean;
-}
+const res = swapKeysAndValues<TObj>(obj);
 
-class ExtendedListClass extends List {
-	first() {
-		return this.items[0];
-	}
-}
-
-////////////////
-const res = new ExtendedListClass(['1', '2']);
-console.log(res.first());
-////////////////
-
-
-type ListType = GConstructor<List>;
-type AccordeonType = GConstructor<Accordeon>;
-
-// это миксин:
-function ExtendsList<TBase extends ListType & AccordeonType>(Base: TBase) {
-	return class ExtendedList extends Base {
-		first() {
-			return this.items[0];
-		}
-	}
-}
-
-
-class AccordeonList {
-	isOpened: boolean;
-	constructor(public items: string[]) { }
-}
-
-
-const list = ExtendsList(AccordeonList);
-const res2 = new list(['first', 'second']);
-console.log(res2.first());
-
-
-
-// пример про дженерик конструктор: https://www.simonholywell.com/post/typescript-constructor-type.html
+console.log(res);
