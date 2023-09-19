@@ -1,31 +1,52 @@
 // Generics
-// урок Generic классы
-class Resp<D, E>{
-	data?: D;
-	error?: E;
+// урок Mixins
 
-	constructor(data?: D, error?: E) {
-		if (data) this.data = data;
-		if (error) this.error = error;
-	}
+type Constructor = new (...args: any[]) => {};
+type GConstructor<T = {}> = new (...args: any[]) => T; // задать тип по умолчанию: <T = {}>
 
+class List {
+	constructor(public items: string[]) { }
 }
 
-const resp = new Resp<string, number>('data', 0); // лучше явно передавать типы через дженерики типы, т.к. иначе может в типе переменноый выдаваться unknown
-resp.error;
+class Accordeon {
+	isOpened: boolean;
+}
 
-
-class HTTPResp<D, E, F> extends Resp<D, E> { // чтобы расширить класс, нужно соотв. передать дженерики в оба определения + можно добавить типов
-	// или можно сделать так:
-
-	// class HTTPResp extends Resp<string, number> { // передать явные типы
-
-	code: F;
-
-	setCode(code: F) {
-		this.code = code;
+class ExtendedListClass extends List {
+	first() {
+		return this.items[0];
 	}
 }
 
-const resp2 = new HTTPResp<string, number, number>();
-resp2.data;
+////////////////
+const res = new ExtendedListClass(['1', '2']);
+console.log(res.first());
+////////////////
+
+
+type ListType = GConstructor<List>;
+type AccordeonType = GConstructor<Accordeon>;
+
+// это миксин:
+function ExtendsList<TBase extends ListType & AccordeonType>(Base: TBase) {
+	return class ExtendedList extends Base {
+		first() {
+			return this.items[0];
+		}
+	}
+}
+
+
+class AccordeonList {
+	isOpened: boolean;
+	constructor(public items: string[]) { }
+}
+
+
+const list = ExtendsList(AccordeonList);
+const res2 = new list(['first', 'second']);
+console.log(res2.first());
+
+
+
+// пример про дженерик конструктор: https://www.simonholywell.com/post/typescript-constructor-type.html
