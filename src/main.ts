@@ -1,42 +1,33 @@
-// Классы
-// урок Абстрактные классы
+// Generics
+// урок Пример встроенных generic
+
+const num: Array<number> = [1, 2, 3];
 
 
-
-/*
-
-Разница между abstract class и интерфейсами
-
-в интерфейсе можно только задать методы как тип, но нельзя задать реализацию
-
-abstract метод - тоже самое, что и определение метода в интерфейсе - можно задать только тип метода - что принимает и что возвращает
-
-
-соотв. задав в абстрактном классе абстрактный метод, можно задать обычный метод, написать его реализацию и в нем можно вызывать абстрактные методы, т.к. подразумевается, 
-что при расширении класса абстрактным классом, обязатель нужно будет реализовать все абстрактные методы.
-
-а методы, которые заданы в абстрактном классе можно не переопределять, они и так будут доступны в расширяемом классе, как будто бы мы расширили класс обычным классом.
-
-
-*/
-
-
-abstract class Controller {
-	abstract handle(req: any): any;
-
-	handleWihthLogs(req: any) {
-		console.log('START');
-		this.handle(req);
-		console.log('END');
-	}
+async function test() {
+	const a = await new Promise<number>((resolve, reject) => { // в дженерике промиса указываем возвращаемый тип данных
+		resolve(1)
+	});
 }
 
-class UserController extends Controller {
 
-	handle(req: any) {
-		console.log(req);
-	}
-
+const check: Record<string, boolean> = { // указываем тип ключа и значения
+	drive: true,
+	kpp: false,
 }
 
-console.log(new UserController().handleWihthLogs({ body: 'test' }));
+
+function logMiddleware<T>(data: T): T {
+	console.log(data);
+	return data;
+}
+
+const res = logMiddleware<number>(10);
+
+
+
+
+function getSplitedHalf<T>(data: Array<T>): Array<T> { // ограничить тип дженерика
+	const l = data.length / 2;
+	return data.splice(0, l);
+}
