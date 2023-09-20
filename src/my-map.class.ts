@@ -10,7 +10,6 @@ class MapItem {
 	constructor(
 		public value: IItem,
 		public next: MapItem | null,
-		// public deleted = false,
 	) { }
 }
 
