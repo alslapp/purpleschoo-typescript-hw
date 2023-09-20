@@ -36,8 +36,8 @@ interface IData {
 const obj1: IData[] = [
 	{ group: 1, name: 'c', },
 	{ group: 1, name: 'r', },
-	{ group: 2, name: 't', },
-	{ group: 3, name: 'y', },
+	{ group: 2, name: 'r', },
+	{ group: 3, name: 'c', },
 	{ group: 4, name: 'u', },
 ];
 
@@ -64,3 +64,4 @@ function group<T extends Record<TKey, any>>(array: T[], key: keyof T): IGroup<T>
 }
 
 console.log(group(obj1, 'group'));
+console.log(group(obj1, 'name'));
