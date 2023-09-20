@@ -16,9 +16,9 @@ class MapItem {
 
 class MyMap {
 	protected _buckets: IBucket | null = null;
-	protected _firstItem: MapItem | null;
-	protected _lastItem: MapItem | null;
-	protected current: MapItem | null | undefined;
+	protected _firstItem: MapItem | null = null;
+	protected _lastItem: MapItem | null = null;
+	protected current: MapItem | null | undefined = null;
 	protected _size: number = 0;
 
 	protected _hash(string: string): string {
@@ -108,7 +108,7 @@ class MyMap {
 
 		let deletedItem = null;
 
-		// если нужно удалить первый элемент, тогда назначем первым следующий после него элемент
+		// если нужно удалить первый элемент, тогда назначим первым следующий после него элемент
 		if (keyForDelete === this._firstItem?.value[0]) {
 			deletedItem = this._firstItem;
 			this._firstItem = this._firstItem.next;
@@ -161,6 +161,7 @@ class MyMap {
 		this._firstItem = null;
 		this._lastItem = null;
 		this._buckets = null;
+		this.current = null;
 		this._size = 0;
 	}
 
