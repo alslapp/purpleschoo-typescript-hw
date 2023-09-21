@@ -1,5 +1,7 @@
+export { }
+
 // Манипуляция с типами
-// урок
+// урок keyof
 
 interface IUser {
 	name: string;
