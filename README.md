@@ -1,1 +1,1 @@
-# Домашнее задание по курсу Purpleschoo Typescript
+# Курс Purpleschoo Typescript
