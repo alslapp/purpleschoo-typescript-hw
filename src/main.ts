@@ -1,36 +1,63 @@
-// Домашнее задание - Продвинутые типы
+// Классы
+// Домашнее задание - Классы
 
-import axios from 'axios';
-import { API_DUMMYJSON_URL, USER_ERROR } from './constants';
+import { MyMap } from './my-map.class';
 
-function isResHasUsers(res: IRes): res is IRes {
-	// prettier-ignore
-	return !!res && 'data' in res
-		&& 'users' in res.data && Array.isArray(res.data.users)
-		&& 'total' in res.data
-		&& 'skip' in res.data
-		&& 'limit' in res.data
-		;
+const myMap = new MyMap();
+
+myMap.set('London', '+15');
+myMap.set('Moscow', '+18');
+myMap.set('Moscow', '+38');
+myMap.set('Moscow', '+11');
+myMap.set('Moscow', '+32');
+myMap.set('Berlin', '+1');
+myMap.set('Kazan', '+1');
+
+console.log('size 1', myMap.size);
+
+myMap.delete('London');
+
+console.log('size 2', myMap.size);
+
+myMap.set('Moscow2', {
+	t: 1,
+	r: 3,
+});
+
+myMap.set('Kazan1', '+1');
+myMap.set('Kazan2', '+1');
+myMap.set('Kazan3', '+134');
+
+console.log('size 3', myMap.size);
+
+console.log('температура в городе Казань: ', myMap.get('Kazan'));
+console.log('температура в городе Москва: ', myMap.get('Moscow'));
+console.log('температура в городе Kazan3: ', myMap.get('Kazan3'));
+
+console.log('удаление: ', myMap.delete('Moscow2'));
+console.log('');
+
+
+// console.log('==================================');
+// for (let b in myMap.buckets) {
+// 	const bucket = myMap.buckets[b];
+// 	for (let c in bucket) {
+// 		const item = bucket[c];
+// 		if (item) console.log('item', item['value']);
+// 	}
+// }
+// console.log('==================================');
+
+
+console.log('size 4', myMap.size);
+
+for (let item of myMap) {
+	console.log(item);
 }
 
-async function getUsers(): Promise<IResData> {
-	try {
-		const res = await axios.get(API_DUMMYJSON_URL.USERS);
-		if (isResHasUsers(res)) {
-			res.data.total = +res.data.total;
-			res.data.skip = +res.data.skip;
-			res.data.limit = +res.data.limit;
-			return res.data;
-		}
-	} catch (error) {
-		if (error instanceof Error) {
-			console.log(error.message);
-		}
-	}
-	throw new Error(USER_ERROR.BAD_REQUEST);
-}
+myMap.clear();
+console.log('size 5', myMap.size);
 
-(async function () {
-	const { users, total, skip, limit }: IResData = await getUsers();
-	console.log({ users, total, skip, limit });
-})();
+for (let item of myMap) {
+	console.log(item);
+}
