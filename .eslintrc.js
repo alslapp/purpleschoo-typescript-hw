@@ -16,6 +16,7 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
+    'no-unused-vars': 'off',
     'no-empty-function': 'off',
     'no-empty-pattern': 'off',
     'prettier/prettier': [
@@ -25,7 +26,7 @@ module.exports = {
         'semi': true,
         'trailingComma': 'all',
         'bracketSpacing': true,
-        'printWidth': 100,
+        'printWidth': 300,
         'endOfLine': 'auto',
       },
     ],
@@ -41,5 +42,6 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/ban-types': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
   },
 }
