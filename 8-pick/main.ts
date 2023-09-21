@@ -23,7 +23,7 @@ const user = {
 	skills: ['typescript', 'javascript'],
 }
 
-function pickObjectKeys<T extends IUser>(data: T, keys: TFields<T>): TUserPartial<T> {
+function pickObjectKeys<T extends IUser, K extends keyof T>(data: T, keys: Array<K>): TUserPartial<T> {
 	const res: TUserPartial<T> = {};
 	keys.forEach(key => res[key] = data[key]);
 	return res;
@@ -32,3 +32,19 @@ function pickObjectKeys<T extends IUser>(data: T, keys: TFields<T>): TUserPartia
 const res = pickObjectKeys(user, ['name', 'age']);
 
 console.log(res);
+
+
+
+// решение от наставника
+function pickObjectKeys2<T extends IUser, K extends keyof T>(obj: T, keys: Array<K>): { [key in typeof keys[number]]: T[key] } {
+	const res = {} as { [key in typeof keys[number]]: T[key] }
+	for (const key of keys) {
+		res[key] = obj[key]
+	}
+	return res
+}
+
+
+const res2 = pickObjectKeys2(user, ['name', 'age']);
+
+console.log(res2);
