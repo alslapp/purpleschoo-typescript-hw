@@ -20,6 +20,9 @@ type IDifferense<A, B> = Pick<A, TExcludedKeys<A, B>>; // тип, в котор�
 const a: IA = { a: 5, b: '' };
 const b: IB = { a: 10, c: true };
 
+// у меня снова сомнения, что я что-то не дотипизировал, хотя в v0 выдает нужные ключи
+// напишите пожалуйста свое решение.
+
 function differense<A extends {}, B extends {}>(a: A, b: B): IDifferense<A, B> {
 	let key: keyof A;
 	for (key in a) {
