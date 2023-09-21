@@ -5,7 +5,7 @@
   "main": "./dist/main.js",
   "scripts": {
     "tsc:w": "tsc -w",
-    "build:run": "tsc && node dist/main.js"
+    "build:run": "tsc && node dist/main"
   },
   "author": "",
   "license": "ISC",
