@@ -36,7 +36,7 @@ console.log(res);
 
 
 // решение от наставника
-function pickObjectKeys2<T extends IUser, K extends keyof T>(obj: T, keys: Array<K>): { [key in typeof keys[number]]: T[key] } {
+function pickObjectKeys2<T extends {}, K extends keyof T>(obj: T, keys: Array<K>): { [key in typeof keys[number]]: T[key] } {
 	const res = {} as { [key in typeof keys[number]]: T[key] }
 	for (const key of keys) {
 		res[key] = obj[key]
