@@ -1,2 +1,1 @@
 # Курс Purpleschoo Typescript
-Декораторы
