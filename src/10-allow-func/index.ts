@@ -6,7 +6,7 @@ export { };
 // Домашнее задание - Декораторы
 
 /*
-Написать декоратор, который при присвоении проверяет присваиваемое значение функцией.
+Написать декоратор, который при присвоении value property проверяет присваиваемое значение функцией.
 Если она возвращает true - присваивание происходит, если false - то нет.
 */
 
@@ -17,8 +17,8 @@ class User {
 
 function allowFunc(fn: Function) {
 	return function (
-		target: Object, // объект, к которому относится метод, или this
-		propertyKey: string, // имя свойства
+		target: Object,
+		propertyKey: string,
 	) {
 		let value: number;
 		const setter = function (newVal: number) {
