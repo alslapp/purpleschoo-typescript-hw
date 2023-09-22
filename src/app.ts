@@ -1,8 +1,9 @@
 // Модульность и библиотеки
-// Namespaces и reference
+// Модульность на backend
 
-/// <reference path="./module/app2.ts"/>
-// reference -  это устаревшая опция
+// в package.json добавить "type": "module", иначе ругается, что в скомпилированном файле в импортах нет расширения файлов .js
+// и добавить в импорт в TS расширение .js. Тогда всё работает.
+import { a } from './module/app2.js';
 
 /*
 	в tsconfig.json:
@@ -14,4 +15,4 @@
 	// "resolveJsonModule": true,
 */
 
-console.log(A.a);
+console.log(a);
