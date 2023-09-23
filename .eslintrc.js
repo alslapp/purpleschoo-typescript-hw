@@ -16,11 +16,6 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
-
-    'object-curly-spacing': ['error'],
-    'array-bracket-spacing': ['error'],
-    'computed-property-spacing': ['error'],
-
     'no-unused-vars': 'off',
     'no-empty-function': 'off',
     'no-empty-pattern': 'off',
