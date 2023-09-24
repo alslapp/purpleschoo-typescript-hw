@@ -1,7 +1,9 @@
-export {};
+export { };
 // Порождающие паттерны
 // Builder
 
+// идея заключается в том, чтобы чейнить меторы, т.е. нужно в каждом методе (кроме заключительного) возвращать this.
+// последний метод завершает цепочку вызовов тем, что отдает финальный объек с нужными полями.
 
 enum ImageFormat {
 	Png = 'png',
@@ -58,11 +60,4 @@ class ImageBuilder {
 	}
 }
 
-console.log(
-	new ImageBuilder()
-	.addJpg()
-	.addPng()
-	.addResolution(100, 50)
-	.addResolution(200, 100)
-	.build(),
-);
+console.log(new ImageBuilder().addJpg().addPng().addResolution(100, 50).addResolution(200, 100).build());
