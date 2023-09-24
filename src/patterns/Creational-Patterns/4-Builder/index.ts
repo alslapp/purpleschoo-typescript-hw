@@ -60,4 +60,6 @@ class ImageBuilder {
 	}
 }
 
-console.log(new ImageBuilder().addJpg().addPng().addResolution(100, 50).addResolution(200, 100).build());
+console.log(
+	new ImageBuilder().addJpg().addPng().addResolution(100, 50).addResolution(200, 100).build(),
+);
