@@ -19,6 +19,7 @@ module.exports = {
     'no-unused-vars': 'off',
     'no-empty-function': 'off',
     'no-empty-pattern': 'off',
+
     'prettier/prettier': [
       'error', {
         'singleQuote': true,
@@ -30,6 +31,7 @@ module.exports = {
         'endOfLine': 'auto',
       },
     ],
+
     'react-hooks/exhaustive-deps': 'off',
     '@typescript-eslint/no-empty-function': [
       'off',
