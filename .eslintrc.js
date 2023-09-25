@@ -16,14 +16,10 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
-
-    'object-curly-spacing': ['error'],
-    'array-bracket-spacing': ['error'],
-    'computed-property-spacing': ['error'],
-
     'no-unused-vars': 'off',
     'no-empty-function': 'off',
     'no-empty-pattern': 'off',
+
     'prettier/prettier': [
       'error', {
         'singleQuote': true,
@@ -31,10 +27,11 @@ module.exports = {
         'semi': true,
         'trailingComma': 'all',
         'bracketSpacing': true,
-        'printWidth': 300,
+        'printWidth': 100,
         'endOfLine': 'auto',
       },
     ],
+
     'react-hooks/exhaustive-deps': 'off',
     '@typescript-eslint/no-empty-function': [
       'off',
