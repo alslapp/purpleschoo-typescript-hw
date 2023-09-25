@@ -24,6 +24,9 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "reflect-metadata": "^0.1.13"
+    "i": "^0.3.7",
+    "npm": "^10.1.0",
+    "reflect-metadata": "^0.1.13",
+    "sort-by": "^1.2.0"
   }
 }
