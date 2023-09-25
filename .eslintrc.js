@@ -3,11 +3,18 @@ module.exports = {
     project: 'tsconfig.json', tsconfigRootDir: __dirname, sourceType: 'module',
   }, plugins: ['@typescript-eslint/eslint-plugin'], extends: [
     'plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended',
-  ], root: true, env: {
-    node: true, jest: true,
-  }, ignorePatterns: ['.eslintrc.js'], rules: {
+  ],
+  root: true,
+  env: {
+    node: true,
+    jest: true,
+  },
+  ignorePatterns: ['.eslintrc.js'],
+  rules: {
+    'no-unused-vars': 'off',
     'no-empty-function': 'off',
     'no-empty-pattern': 'off',
+
     'prettier/prettier': [
       'error', {
         'singleQuote': true,
@@ -15,10 +22,11 @@ module.exports = {
         'semi': true,
         'trailingComma': 'all',
         'bracketSpacing': true,
-        'printWidth': 300,
+        'printWidth': 100,
         'endOfLine': 'auto',
       },
     ],
+
     'react-hooks/exhaustive-deps': 'off',
     '@typescript-eslint/no-empty-function': [
       'off',
