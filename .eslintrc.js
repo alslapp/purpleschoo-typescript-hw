@@ -1,7 +1,12 @@
 module.exports = {
-  parser: '@typescript-eslint/parser', parserOptions: {
-    project: 'tsconfig.json', tsconfigRootDir: __dirname, sourceType: 'module',
-  }, plugins: ['@typescript-eslint/eslint-plugin'], extends: [
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: 'tsconfig.json',
+    tsconfigRootDir: __dirname,
+    sourceType: 'module',
+  },
+  plugins: ['@typescript-eslint/eslint-plugin'],
+  extends: [
     'plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended',
   ],
   root: true,
@@ -38,6 +43,7 @@ module.exports = {
     '@typescript-eslint/no-namespace': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-empty-interface': 'off',
-    '@typescript-eslint/ban-types': 'off'
+    '@typescript-eslint/ban-types': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
   },
-};
+}
