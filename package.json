@@ -1,5 +1,5 @@
 {
-  "name": "purpleschool-typescript",
+  "name": "command-executer",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,8 +11,8 @@
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "@types/inquirer": "^9.0.3",
+  "dependencies": {
+    "inquirer": "^8.2.0",
     "@typescript-eslint/eslint-plugin": "^6.7.2",
     "eslint": "^8.49.0",
     "eslint-config-prettier": "^8.8.0",
@@ -24,8 +24,8 @@
     "prettier": "^2.8.0",
     "typescript": "^5.2.2"
   },
-  "dependencies": {
-    "inquirer": "^9.2.11",
-    "reflect-metadata": "^0.1.13"
+  "devDependencies": {
+    "@types/inquirer": "^8.2.0",
+    "@types/node": "^17.0.14"
   }
 }
